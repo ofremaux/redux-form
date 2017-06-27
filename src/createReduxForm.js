@@ -735,9 +735,11 @@ const createReduxForm = structure => {
           }
         },
         (dispatch, initialProps) => {
-          const bindForm = actionCreator =>
-            actionCreator.bind(null, initialProps.form)
-
+          const bindForm = actionCreator => {
+            if (typeof actionCreator !== 'function') return
+            return actionCreator.bind(null, initialProps.form)
+        }
+        
           // Bind the first parameter on `props.form`
           const boundFormACs = mapValues(formActions, bindForm)
           const boundArrayACs = mapValues(arrayActions, bindForm)
